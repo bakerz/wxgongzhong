@@ -126,7 +126,7 @@ router.post('/reg', function(req, res, next) {
 			console.log('注册成功！');
 			newUser.password = null;
 			delete newUser.password;
-			req.session.user = newUser;
+		//	req.session.user = newUser;
 			return res.redirect('/');
 		});
 	});
