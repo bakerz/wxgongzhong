@@ -1,4 +1,5 @@
 var express = require('express');
+var crypto = require('crypto');
 var router = express.Router();
 
 var model = require('../models/model');
@@ -91,19 +92,19 @@ router.post('/reg', function(req, res, next) {
 
 	//检查两次输入的密码是否一致
 	if(password != passwordRepeat) {
-		req.flash('error', '两次输入的密码不一致！');
+		console.log('两次输入的密码不一致！');
 		return res.redirect('/reg');
 	}
 
 	//检查用户名是否已经存在
 	User.findOne({username:username}, function(err, user) {
 		if(err) {
-			req.flash('error', err);
+			console.log(err);
 			return res.redirect('/reg');
 		}
 
 		if(user) {
-			req.flash('error', '用户名已经存在');
+			console.log('用户名已经存在');
 			return res.redirect('/reg');
 		}
 
@@ -119,10 +120,10 @@ router.post('/reg', function(req, res, next) {
 
 		newUser.save(function(err, doc) {
 			if(err) {
-				req.flash('error', err);
+				console.log(err);
 				return res.redirect('/reg');
 			}
-			req.flash('success', '注册成功！');
+			console.log('注册成功！');
 			newUser.password = null;
 			delete newUser.password;
 			req.session.user = newUser;

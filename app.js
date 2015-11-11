@@ -12,7 +12,7 @@ var users = require('./routes/users');
 
 var app = express();
 
-mongoose.connect('mongodb://localhost:2701/ymsd');
+mongoose.connect('mongodb://localhost:27017/ymsdhp');
 mongoose.connection.on('error', console.error.bind(console, '连接数据库失败'));
 
 // view engine setup
