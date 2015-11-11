@@ -1,6 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
+var model = require('../models/model');
+var checkIsLogin = require('./checkLogin');
+
+var User = model.User;
+
 var formidable = require('formidable'),
 	fs = require('fs'),
 	AVATAR_UPLOAD_FOLDER = '/avatar/',
@@ -8,6 +13,7 @@ var formidable = require('formidable'),
 	fn;
 
 /* GET home page. */
+//router.get('/', checkIsLogin.notLogin);
 router.get('/', function(req, res, next) {
   res.render('index', { title: TITLE });
 });
@@ -69,5 +75,60 @@ router.post('/', function(req, res) {
 
     console.log('上传成功');
 })
+
+router.get('/login', function(req, res) {
+	res.render('login', { title: '登录' });
+})
+
+router.get('/reg', function(req, res) {
+	res.render('register', { title: '注册' });
+})
+
+router.post('/reg', function(req, res, next) {
+	var username = req.body.username,
+		password = req.body.password,
+		passwordRepeat = req.body.passwordRepeat;
+
+	//检查两次输入的密码是否一致
+	if(password != passwordRepeat) {
+		req.flash('error', '两次输入的密码不一致！');
+		return res.redirect('/reg');
+	}
+
+	//检查用户名是否已经存在
+	User.findOne({username:username}, function(err, user) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/reg');
+		}
+
+		if(user) {
+			req.flash('error', '用户名已经存在');
+			return res.redirect('/reg');
+		}
+
+		//对密码进行md5加密
+		var md5 = crypto.createHash('md5'),
+			md5password = md5.update(password).digest('hex');
+
+		var newUser = new User({
+			username: username,
+			password: md5password,
+			email: req.body.email
+		});
+
+		newUser.save(function(err, doc) {
+			if(err) {
+				req.flash('error', err);
+				return res.redirect('/reg');
+			}
+			req.flash('success', '注册成功！');
+			newUser.password = null;
+			delete newUser.password;
+			req.session.user = newUser;
+			return res.redirect('/');
+		});
+	});
+});
 
 module.exports = router;
