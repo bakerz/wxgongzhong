@@ -8,6 +8,7 @@
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/javascripts/script.js"></script>
 </head>
 <body>
 	<div class="container" id="page-index">
@@ -108,19 +109,21 @@
 	<div class="modal fade" id="pro-img">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title">商品图片</h4>
-				</div>
-				<div class="modal-body">
-					<input type="file" class="form-control">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary">确定</button>
-				</div>
+				<form method="post" enctype="multipart/form-data">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">商品图片</h4>
+					</div>
+					<div class="modal-body">
+						<input type="file" class="form-control" name="fulAvatar" id="fulAvatar" accept="image/*" />
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<button type="submit" class="btn btn-primary" id="btnSub" >确定</button>
+					</div>
+				</form>
 			</div><!-- /.modal-content -->
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
