@@ -46,7 +46,7 @@ router.post('/', function(req, res) {
         }
         
         var extName = '';  //后缀名
-        switch (files.fulAvatar.type) {
+        switch (files.img.type) {
             case 'image/pjpeg':
                 extName = 'jpg';
                 break;
@@ -69,7 +69,7 @@ router.post('/', function(req, res) {
 
         var avatarName = Math.random() + '.' + extName;
         var newPath = form.uploadDir + avatarName;
-        fs.renameSync(files.fulAvatar.path, newPath);  //重命名
+        fs.renameSync(files.img.path, newPath);  //重命名
 		
 		res.render('index', { title: TITLE });
     });

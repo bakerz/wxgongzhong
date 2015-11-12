@@ -14,6 +14,10 @@ body {
 	height: auto;
 	border: 1px solid #ccc;
 }
+.pro-color-box,
+.pro-size-box {
+	font-size: 0;
+}
 .pro-color-item,
 .pro-size-item {
 	display: inline-block;
@@ -21,5 +25,6 @@ body {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	vertical-align: top;
-	margin-bottom: 5px;
+	margin: 0 5px 5px 0;
+	font-size: 16px;
 }
