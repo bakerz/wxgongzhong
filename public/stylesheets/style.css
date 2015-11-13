@@ -4,6 +4,15 @@ body {
 #page-index {
 	font-size: 1.6em;
 }
+
+.page-title {
+	margin: 60px auto;
+}
+
+.reg-btn {
+	margin-top: 30px;
+}
+
 .pro-img-item {
 	margin-bottom: 5px;
 //	max-height: 77px;
