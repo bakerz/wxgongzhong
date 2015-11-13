@@ -5,6 +5,10 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
+var flash = require('connect-flash');
+
 var mongoose = require('mongoose');
 
 var routes = require('./routes/index');
@@ -26,6 +30,20 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(session({
+	key: 'session',
+	secret: 'keboard cat',
+	cookie: {maxAge: 1000 * 60 * 60 * 24 * 7}, // 7day
+	store: new MongoStore({
+		db: 'ymsdhp',
+		mongooseConnection: mongoose.connection
+	}),
+	resave: false,
+	saveUninitialized: true
+}));
+
+app.use(flash());
 
 app.use('/', routes);
 app.use('/users', users);
