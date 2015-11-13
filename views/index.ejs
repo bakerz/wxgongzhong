@@ -12,16 +12,11 @@
 </head>
 <body>
 	<div class="container" id="page-index">
+		<%- include promptMessage %>
+		<h3 class="text-center page-title"><%= user.username %></h3>
 		<div class="row">
 			<div class="col-xs-12">
 				<form class="form-horizontal">
-					<div class="form-group">
-						<label for="company-name" class="col-xs-12 control-label">商家名称</label>
-						<div class="col-xs-10">
-							<input type="text" class="form-control" id="company-name">
-						</div>
-					</div>
-					
 					<div class="form-group">
 						<label for="product-name" class="col-xs-12 control-label">商品名称</label>
 						<div class="col-xs-10">
@@ -52,7 +47,7 @@
 					
 					<div class="form-group img-group">
 						<label for="product-img" class="col-xs-12 control-label">商品图片</label>
-						<div class="col-xs-4 pro-img-item">
+						<!--<div class="col-xs-4 pro-img-item">
 							<img src="//g-search1.alicdn.com/img/bao/uploaded/i4i2/TB1vwVAHFXXXXcYXXXXXXXXXXXX_!!0-item_pic.jpg_160x160.jpg">
 						</div>
 						<div class="col-xs-4 pro-img-item">
@@ -60,7 +55,7 @@
 						</div>
 						<div class="col-xs-4 pro-img-item">
 							<img src="//g-search1.alicdn.com/img/bao/uploaded/i4i3/TB1U30zHFXXXXataXXXXXXXXXXX_!!0-item_pic.jpg_160x160.jpg">
-						</div>
+						</div>-->
 						<div class="col-xs-12">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-img">添加</button>
 						</div>
@@ -69,13 +64,13 @@
 					<div class="form-group color-group">
 						<label for="product-color" class="col-xs-12 control-label">商品颜色</label>
 						<div class="col-xs-12 pro-color-box">
-							<div class="pro-color-item">绿色</div>
+							<!--<div class="pro-color-item">绿色</div>
 							<div class="pro-color-item">白色</div>
 							<div class="pro-color-item">黑色</div>
 							<div class="pro-color-item">红色</div>
 							<div class="pro-color-item">翠绿色</div>
 							<div class="pro-color-item">墨绿色</div>
-							<div class="pro-color-item">橘黄色</div>
+							<div class="pro-color-item">橘黄色</div>-->
 						</div>
 						<div class="col-xs-12">
 							<div class="btn btn-info" data-toggle="modal" data-target="#pro-color">添加</div>
@@ -85,12 +80,12 @@
 					<div class="form-group size-group">
 						<label for="product-size" class="col-xs-12 control-label">商品尺码</label>
 						<div class="col-xs-12 pro-size-box">
-							<div class="pro-size-item">XS</div>
+							<!--<div class="pro-size-item">XS</div>
 							<div class="pro-size-item">S</div>
 							<div class="pro-size-item">M</div>
 							<div class="pro-size-item">L</div>
 							<div class="pro-size-item">XL</div>
-							<div class="pro-size-item">XXL</div>
+							<div class="pro-size-item">XXL</div>-->
 						</div>
 						<div class="col-xs-12">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-size">添加</button>
@@ -100,6 +95,7 @@
 					<div class="form-group">
 						<div class="col-xs-12">
 							<button type="submit" class="btn btn-info center-block">提&nbsp;&nbsp;交</button>
+							<a href="/logout">退出</a>
 						</div>
 					</div>
 				</form>
