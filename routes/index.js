@@ -14,9 +14,14 @@ var formidable = require('formidable'),
 	fn;
 
 /* GET home page. */
-//router.get('/', checkIsLogin.notLogin);
+router.get('/', checkIsLogin.notLogin);
 router.get('/', function(req, res, next) {
-  res.render('index', { title: TITLE });
+	res.render('index', {
+		title: TITLE,
+		user: req.session.user,
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
 });
 
 router.post('/', function(req, res) {
@@ -41,6 +46,7 @@ router.post('/', function(req, res) {
     
         if (err) {
             console.log(err);
+			req.flash('error', err);
             res.render('index', { title: TITLE });
             return;
         }
@@ -63,6 +69,7 @@ router.post('/', function(req, res) {
     
         if(extName.length == 0){
             console.log('只支持png和jpg格式图片');
+			req.flash('error', '只支持png和jpg格式图片');
             res.render('index', { title: TITLE });
             return;				   
         }
@@ -75,14 +82,57 @@ router.post('/', function(req, res) {
     });
 
     console.log('上传成功');
+	req.flash('success', '上传成功');
 })
 
+/*-----------------------------------*\
+|-------------登录login---------------|
+\*-----------------------------------*/
 router.get('/login', function(req, res) {
-	res.render('login', { title: '登录' });
+	res.render('login', { 
+		title: '登录',
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
 })
 
+router.post('/login', function(req, res, next) {
+	var username = req.body.username,
+		password = req.body.password;
+
+	User.findOne({username:username}, function(err, user) {
+		if(err) {
+			req.flash("err", err);
+			return next(err);
+		}
+		if(!user) {
+			req.flash('error', '用户不存在！');
+			return res.redirect('/login');
+		}
+		//对密码进行md5加密
+		var md5 = crypto.createHash('md5'),
+			md5password = md5.update(password).digest('hex');
+		if(user.password !== md5password) {
+			req.flash('error', '密码错误！');
+			return res.redirect('/login');	
+		}
+		req.flash('success', '登录成功！');
+		user.password = null;
+		delete user.password;
+		req.session.user = user;
+		return res.redirect('/');
+	});
+});
+
+/*-----------------------------------*\
+|-------------注册register------------|
+\*-----------------------------------*/
 router.get('/reg', function(req, res) {
-	res.render('register', { title: '注册' });
+	res.render('register', { 
+		title: '注册',
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
 })
 
 router.post('/reg', function(req, res, next) {
@@ -93,6 +143,7 @@ router.post('/reg', function(req, res, next) {
 	//检查两次输入的密码是否一致
 	if(password != passwordRepeat) {
 		console.log('两次输入的密码不一致！');
+		req.flash('error', '两次输入的密码不一致');
 		return res.redirect('/reg');
 	}
 
@@ -100,11 +151,13 @@ router.post('/reg', function(req, res, next) {
 	User.findOne({username:username}, function(err, user) {
 		if(err) {
 			console.log(err);
+			req.flash('error', err);
 			return res.redirect('/reg');
 		}
 
 		if(user) {
 			console.log('用户名已经存在');
+			req.flash('error', '用户名已经存在');
 			return res.redirect('/reg');
 		}
 
@@ -121,15 +174,27 @@ router.post('/reg', function(req, res, next) {
 		newUser.save(function(err, doc) {
 			if(err) {
 				console.log(err);
+				req.flash('error', err);
 				return res.redirect('/reg');
 			}
 			console.log('注册成功！');
+			req.flash('success', '注册成功');
 			newUser.password = null;
 			delete newUser.password;
-		//	req.session.user = newUser;
+			req.session.user = newUser;
 			return res.redirect('/');
 		});
 	});
+});
+
+
+/*-----------------------------------*\
+|-------------退出logout--------------|
+\*-----------------------------------*/
+router.get('/logout', function(req, res, next) {
+	req.session.user = null;
+	req.flash('success', '退出登录成功！');
+	return res.redirect('/login');
 });
 
 module.exports = router;
