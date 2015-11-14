@@ -27,7 +27,8 @@ $(function(){
 		var imgVal = $(this).val();
 		
 		if(imgVal.length == 0) {
-			alert('请选择要上传的文件');
+			$('#pro-img').modal('hide');
+			$('.alert-box').html('<div class="alert alert-danger" role="alert">请选择要上传的文件</div>');
 			return false;
 		}
 		
@@ -35,9 +36,12 @@ $(function(){
 		var extName = imgVal.substring(imgVal.lastIndexOf('.'), imgVal.length).toLowerCase();
 		
 		if(extName != '.png' && extName != '.jpg') {
-			alert('只支持png和jpg格式图片');
+			$('#pro-img').modal('hide');
+			$(this).val('');
+			$('.alert-box').html('<div class="alert alert-danger" role="alert">只支持png和jpg格式图片</div>');
 			return false;
 		}
+		
 		
 		// 图片预览
 		var objUrl = getObjectURL(this.files[0]);
@@ -46,6 +50,7 @@ $(function(){
 			$('.img-group div.col-xs-12').before('<div class="col-xs-4 pro-img-item"><img src="'+ objUrl +'" id="img0"></div>');
 		}
 		
+		$('.alert-box').html('');
 		$('#pro-img').modal('hide');
 		$(this).val('');
 		return true;
