@@ -6,6 +6,7 @@ var model = require('../models/model');
 var checkIsLogin = require('./checkLogin');
 
 var User = model.User;
+var Product = model.Product;
 
 var formidable = require('formidable'),
 	fs = require('fs'),
@@ -25,6 +26,25 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res) {
+	var data = new Product({
+		username: req.session.user.username,
+		name: req.body.name,
+		artno: req.body.artno,
+		place: req.body.place,
+		price: req.body.price,
+		stock: req.body.stock
+	});
+	
+	data.save(function(err, doc) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+		
+		req.flash('success', '提交成功');
+		return res.redirect('/');
+	});
+	/*
 	
     //创建上传表单
     var form = new formidable.IncomingForm();
@@ -83,6 +103,8 @@ router.post('/', function(req, res) {
 
     console.log('上传成功');
 	req.flash('success', '上传成功');
+	
+	*/
 })
 
 /*-----------------------------------*\
@@ -187,6 +209,17 @@ router.post('/reg', function(req, res, next) {
 	});
 });
 
+/*-----------------------------------*\
+|------------图片uploadImg------------|
+\*-----------------------------------*/
+router.get('/uploadImg', function(req, res, next) {
+	res.render('uploadImg', {
+		title: '上传图片',
+		user: req.session.user,
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
+});
 
 /*-----------------------------------*\
 |-------------退出logout--------------|
