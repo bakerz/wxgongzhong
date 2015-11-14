@@ -26,3 +26,14 @@
     background-color: #31b0d5;
     text-decoration: none
 }
+
+.pro-img-item {
+	margin-bottom: 5px;
+//	max-height: 77px;
+//	overflow: hidden;
+}
+.pro-img-item img {
+	width: 100%;
+	height: auto;
+	border: 1px solid #ccc;
+}
