@@ -52,6 +52,8 @@ $(function(){
 	});
 });
 
+
+// del
 //建立一個可存取到該file的url
 function getObjectURL(file) {
 	var url = null ; 
