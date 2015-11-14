@@ -11,15 +11,14 @@ var userSchema = new Schema({
 	}
 });
 
-var articleSchema = new Schema({
-	title: String,
-	author: String,
-	tag: String,
-	content: String,
-	pv: {
-		type: Number,
-		default: 0
-	},
+var productSchema = new Schema({
+	username: String,
+	name: String,
+	place: String,
+	price: String,
+	artno: String,
+	stock: Number,
+	imgs: Array,
 	createTime: {
 		type: Date,
 		default: Date.now
@@ -27,4 +26,4 @@ var articleSchema = new Schema({
 })
 
 exports.User = mongoose.model('User', userSchema);
-exports.Article = mongoose.model('Article', articleSchema);
+exports.Product = mongoose.model('Product', productSchema);
