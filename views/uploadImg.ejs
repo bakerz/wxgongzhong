@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title><%= title %></title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css' />
+	<link rel='stylesheet' href='/stylesheets/uploadImg.css' />
+	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
+	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="/javascripts/script.js"></script>
+</head>
+<body>
+	<div class="container" id="page-index">
+		<%- include promptMessage %>
+		<h3 class="text-center"><%= user.username %> - <%= title %></h3>
+		<div class="row">
+			<div class="col-xs-12">
+				<form class="form-horizontal">
+					<div class="form-group img-group">
+						
+						<div class="col-xs-12">
+							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-img">添加</button>
+							
+							<a href="javascript:;" class="a-upload">
+								<input type="file" name="img" id="img">添加图片
+							</a>
+						</div>
+					</div>
+					<div class="form-group">
+						<div class="col-xs-12">
+							<button type="submit" class="btn btn-info center-block">提&nbsp;&nbsp;交</button>
+							<a href="/logout">退出</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="pro-img">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!--<form method="post" enctype="multipart/form-data">-->
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
+						<h4 class="modal-title">商品图片</h4>
+					</div>
+					<div class="modal-body">
+						<input type="file" class="form-control" name="img" id="img" accept="image/*" />
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+						<!--<button type="submit" class="btn btn-primary" id="btnSub" >确定</button>-->
+					</div>
+				<!--</form>-->
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
+	</div><!-- /.modal -->
+</body>
+</html>
