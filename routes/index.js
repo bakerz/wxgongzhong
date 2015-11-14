@@ -197,4 +197,11 @@ router.get('/logout', function(req, res, next) {
 	return res.redirect('/login');
 });
 
+
+/*-----------------------------------*\
+|------------活动activity-------------|
+\*-----------------------------------*/
+router.get('/activity', function(req, res, next) {
+	res.render('activity', { title: '活动策划' });
+});
 module.exports = router;

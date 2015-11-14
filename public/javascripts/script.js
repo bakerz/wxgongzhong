@@ -23,16 +23,16 @@ $(function(){
     })
 	*/
 	// 图片
-	$('#fulAvatar').change(function() {
-		var fulAvatarVal = $(this).val();
+	$('#img').change(function() {
+		var imgVal = $(this).val();
 		
-		if(fulAvatarVal.length == 0) {
+		if(imgVal.length == 0) {
 			alert('请选择要上传的文件');
 			return false;
 		}
 		
 		// 验证上传文件后缀
-		var extName = fulAvatarVal.substring(fulAvatarVal.lastIndexOf('.'), fulAvatarVal.length).toLowerCase();
+		var extName = imgVal.substring(imgVal.lastIndexOf('.'), imgVal.length).toLowerCase();
 		
 		if(extName != '.png' && extName != '.jpg') {
 			alert('只支持png和jpg格式图片');
