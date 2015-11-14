@@ -8,12 +8,11 @@
 	<link rel='stylesheet' href='/stylesheets/style.css' />
 	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="/javascripts/script.js"></script>
 </head>
 <body>
 	<div class="container" id="page-index">
 		<%- include promptMessage %>
-		<h3 class="text-center page-title"><%= user.username %></h3>
+		<h3 class="text-center"><%= user.username %></h3>
 		<div class="row">
 			<div class="col-xs-12">
 				<form method="post" class="form-horizontal">
@@ -52,16 +51,16 @@
 						</div>
 					</div>
 					
-					<div class="form-group img-group">
+					<!--<div class="form-group img-group">
 						<label for="product-img" class="col-xs-12 control-label">商品图片</label>
-						<!--<div class="col-xs-4 pro-img-item">
+						<div class="col-xs-4 pro-img-item">
 							<img src="//g-search1.alicdn.com/img/bao/uploaded/i4i2/TB1vwVAHFXXXXcYXXXXXXXXXXXX_!!0-item_pic.jpg_160x160.jpg">
-						</div>-->
+						</div>
 						<div class="col-xs-12">
 							<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-img">添加</button>
 						</div>
 					</div>
-					
+					-->
 					<div class="form-group">
 						<div class="col-xs-12">
 							<button type="submit" class="btn btn-info center-block">提&nbsp;&nbsp;交</button>
@@ -72,66 +71,5 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal fade" id="pro-img">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<!--<form method="post" enctype="multipart/form-data">-->
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<h4 class="modal-title">商品图片</h4>
-					</div>
-					<div class="modal-body">
-						<input type="file" class="form-control" name="img" id="img" accept="image/*" />
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-						<!--<button type="submit" class="btn btn-primary" id="btnSub" >确定</button>-->
-					</div>
-				<!--</form>-->
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-	
-	<div class="modal fade" id="pro-color">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title">商品颜色</h4>
-				</div>
-				<div class="modal-body">
-					<input type="text" class="form-control" name="color">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default color-cancel-btn" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary color-ok-btn">确定</button>
-				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-	
-	<div class="modal fade" id="pro-size">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title">商品尺码</h4>
-				</div>
-				<div class="modal-body">
-					<input type="text" class="form-control" name="size">
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default size-cancel-btn" data-dismiss="modal">取消</button>
-					<button type="button" class="btn btn-primary size-ok-btn">确定</button>
-				</div>
-			</div><!-- /.modal-content -->
-		</div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
 </body>
 </html>
