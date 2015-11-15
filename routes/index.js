@@ -26,7 +26,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res) {
-	var data = new Product({
+	var newProduct = new Product({
 		username: req.session.user.username,
 		name: req.body.name,
 		artno: req.body.artno,
@@ -35,13 +35,18 @@ router.post('/', function(req, res) {
 		stock: req.body.stock
 	});
 	
-	data.save(function(err, doc) {
+	newProduct.save(function(err, doc) {
 		if(err) {
 			req.flash('error', err);
 			return res.redirect('/');
 		}
 		
 		req.flash('success', '提交成功');
+		req.session.product = {
+			username: newProduct.username,
+			name: newProduct.name,
+			artno: newProduct.artno
+		};
 		return res.redirect('/uploadImg');
 	});
 	
@@ -164,19 +169,14 @@ router.get('/uploadImg', function(req, res, next) {
 router.post('/uploadImg', function(req, res, next) {
     //创建上传表单
     var form = new formidable.IncomingForm();
-    
     //设置编辑
     form.encoding = 'utf-8';
-    
     //设置上传目录
     form.uploadDir = 'public' + AVATAR_UPLOAD_FOLDER;
-    
     //保留后缀
     form.keepExtensions = true;
-    
     //文件大小 2M
     form.maxFieldsSize = 2 * 1024 * 1024;
-    
     // 上传文件的入口文件
     form.parse(req, function(err, fields, files) {
     
@@ -184,7 +184,7 @@ router.post('/uploadImg', function(req, res, next) {
             console.log(err);
 			req.flash('error', err);
             res.render('index', { title: TITLE });
-            return;
+            return res.redirect('/uploadImg');
         }
         
         var extName = '';  //后缀名
@@ -210,10 +210,23 @@ router.post('/uploadImg', function(req, res, next) {
         }
 
         var avatarName = Math.random() + '.' + extName;
-        var newPath = form.uploadDir + avatarName;
+		var newPath = form.uploadDir + avatarName;
         fs.renameSync(files.img.path, newPath);  //重命名
+		
+		Product.update({
+			username: req.session.product.username,
+			name: req.session.product.name,
+			artno: req.session.product.artno
+		},{
+			$push: {'imgs': avatarName}
+		}, function(err) {
+			if(err) {
+				req.flash('error', err);
+				return res.redirect('/uploadImg');
+			}
+		})
     });
-
+	
     console.log('上传成功');
 	req.flash('success', '上传成功');
 	res.redirect('/uploadImg');
