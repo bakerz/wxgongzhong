@@ -158,12 +158,24 @@ router.post('/reg', function(req, res, next) {
 |------------图片uploadImg------------|
 \*-----------------------------------*/
 router.get('/uploadImg', function(req, res, next) {
-	res.render('uploadImg', {
-		title: '上传图片',
-		user: req.session.user,
-		success: req.flash('success').toString(),
-		error: req.flash('error').toString()
-	});
+	Product.findOne({
+		name: req.session.product.name,
+		artno: req.session.product.artno
+	}, function(err, product) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/uploadImg');
+		} else {
+			res.render('uploadImg', {
+				title: '上传图片',
+				user: req.session.user,
+				proImgs: product.imgs,
+				success: req.flash('success').toString(),
+				error: req.flash('error').toString()
+			});
+		}
+	})
+	
 });
 
 router.post('/uploadImg', function(req, res, next) {
