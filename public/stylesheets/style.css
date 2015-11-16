@@ -37,3 +37,8 @@ body {
 	margin: 0 5px 5px 0;
 	font-size: 16px;
 }
+
+.alert-box {
+	position: relative;
+	z-index: 9999;
+}
