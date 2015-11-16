@@ -37,3 +37,13 @@
 	height: auto;
 	border: 1px solid #ccc;
 }
+
+#pro-img .modal-img {
+	width: 150px;
+    height: 150px;
+    margin: 5px auto 0 auto;
+}
+
+#pro-img .modal-img img {
+	width: 100%;
+}
