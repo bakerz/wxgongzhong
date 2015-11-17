@@ -243,6 +243,29 @@ router.post('/uploadImg', function(req, res, next) {
 	req.flash('success', '上传成功');
 	res.redirect('/uploadImg');
 })
+
+/*-----------------------------------*\
+|-----------提交完成complete----------|
+\*-----------------------------------*/
+router.get('/complete', function(req, res, next) {
+	Product.findOne({
+		name: req.session.product.name,
+		artno: req.session.product.artno
+	}, function(err, product) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+		
+		res.render('complete', {
+			product: product,
+			user: req.session.user,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString()
+		})
+	});
+});
+
 /*-----------------------------------*\
 |-------------退出logout--------------|
 \*-----------------------------------*/
@@ -251,7 +274,6 @@ router.get('/logout', function(req, res, next) {
 	req.flash('success', '退出登录成功！');
 	return res.redirect('/login');
 });
-
 
 /*-----------------------------------*\
 |------------活动activity-------------|
