@@ -14,7 +14,9 @@ var formidable = require('formidable'),
 	TITLE = '货品管理',
 	fn;
 
-/* GET home page. */
+/*-----------------------------------*\
+|--------------货品列表---------------|
+\*-----------------------------------*/
 router.get('/', checkIsLogin.notLogin);
 router.get('/', function(req, res, next) {
 	res.render('index', {
@@ -49,8 +51,45 @@ router.post('/', function(req, res) {
 		};
 		return res.redirect('/uploadImg');
 	});
+});
+
+/*-----------------------------------*\
+|--------编辑货品信息product----------|
+\*-----------------------------------*/
+router.get('/product', function(req, res) {
+	res.render('product', {
+		title: '货品管理',
+		user: req.session.user,
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
+});
+
+router.post('/product', function(req, res) {
+	var newProduct = new Product({
+		username: req.session.user.username,
+		name: req.body.name,
+		artno: req.body.artno,
+		place: req.body.place,
+		price: req.body.price,
+		stock: req.body.stock
+	});
 	
-})
+	newProduct.save(function(err, doc) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+		
+		req.flash('success', '提交成功');
+		req.session.product = {
+			username: newProduct.username,
+			name: newProduct.name,
+			artno: newProduct.artno
+		};
+		return res.redirect('/uploadImg');
+	});
+});
 
 /*-----------------------------------*\
 |-------------登录login---------------|
