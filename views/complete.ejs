@@ -29,6 +29,14 @@
 			<div class="col-xs-12">
 			总库存：<%= product.stock %>
 			</div>
+			<div class="col-xs-12">
+			<% product.imgs.forEach(function(img){ %>
+				<div>图片：</div>
+				<div class="col-xs-4 pro-img-item">
+					<img src="/avatar/<%= img %>">
+				</div>
+			<% }); %>
+			</div>
 			<div class="col-xs-4">
 				<button type="submit" class="btn btn-info center-block submit-btn">
 					<a href="javascript:;">返回列表</a>
