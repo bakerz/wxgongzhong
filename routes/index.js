@@ -19,12 +19,23 @@ var formidable = require('formidable'),
 \*-----------------------------------*/
 router.get('/', checkIsLogin.notLogin);
 router.get('/', function(req, res, next) {
-	res.render('index', {
-		title: TITLE,
-		user: req.session.user,
-		success: req.flash('success').toString(),
-		error: req.flash('error').toString()
-	});
+	Product.find({
+		username: req.session.user.username
+	}, function(err, products) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/');
+		}
+		
+		res.render('index', {
+			title: '货品列表',
+			products: products,
+			user: req.session.user,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString()
+			
+		});
+	})
 });
 
 router.post('/', function(req, res) {
@@ -78,7 +89,7 @@ router.post('/product', function(req, res) {
 	newProduct.save(function(err, doc) {
 		if(err) {
 			req.flash('error', err);
-			return res.redirect('/');
+			return res.redirect('/product');
 		}
 		
 		req.flash('success', '提交成功');

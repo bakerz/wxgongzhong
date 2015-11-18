@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css' />
 	<link rel='stylesheet' href='/stylesheets/style.css' />
+	<link rel='stylesheet' href='/stylesheets/index.css' />
 	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 	<script src="/javascripts/submitProduct.js"></script>
@@ -13,52 +14,29 @@
 <body>
 	<div class="container" id="page-index">
 		<%- include promptMessage %>
-		<h3 class="text-center"><%= user.username %> - 上传商品信息</h3>
+		<h3 class="text-center"><%= user.username %> - 货品列表</h3>
 		<div class="row">
+			<% products.forEach(function(product) { %>
 			<div class="col-xs-12">
-				<form method="post" class="form-horizontal">
-					<div class="form-group">
-						<label for="product-name" class="col-xs-12 control-label">商品名称</label>
-						<div class="col-xs-10">
-							<input type="text" class="form-control" id="product-name" name="name">
-						</div>
+				<div class="product-item clearfix">
+					<div class="col-xs-3 product-img text-center">
+						<% if(product.imgs.length == 0) { %>
+							暂无图片
+						<% } else { %>
+							<img src="/avatar/<%= product.imgs[0] %>">
+						<% } %>
 					</div>
-					
-					<div class="form-group">
-						<label for="product-artno" class="col-xs-12 control-label">货号</label>
-						<div class="col-xs-5">
-							<input type="text" class="form-control" id="product-artno" name="artno">
-						</div>
+					<div class="col-xs-9 product-msg">
+						<div>货品名：<%= product.name %></div>
+						<div>货号：<%= product.artno %></div>
+						<div>库存：<%= product.stock %></div>
 					</div>
-					
-					<div class="form-group">
-						<label for="product-place" class="col-xs-12 control-label">商品产地</label>
-						<div class="col-xs-10">
-							<input type="text" class="form-control" id="product-place" name="place">
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<label for="product-price" class="col-xs-12 control-label">商品价格(元)</label>
-						<div class="col-xs-5">
-							<input type="text" class="form-control" id="product-price" name="price">
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<label for="product-stock" class="col-xs-12 control-label">总库存</label>
-						<div class="col-xs-5">
-							<input type="text" class="form-control" id="product-stock" name="stock">
-						</div>
-					</div>
-					
-					<div class="form-group">
-						<div class="col-xs-12">
-							<button type="submit" class="btn btn-info center-block submit-btn">下&nbsp;一&nbsp;步</button>
-						</div>
-					</div>
-				</form>
+				</div>
 			</div>
+			<% }); %>
+			<button class="btn btn-info center-block">
+				<a href="/product">添加货品</a>
+			</button>
 		</div>
 	</div>
 </body>
