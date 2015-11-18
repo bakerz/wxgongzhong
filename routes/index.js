@@ -11,7 +11,6 @@ var Product = model.Product;
 var formidable = require('formidable'),
 	fs = require('fs'),
 	AVATAR_UPLOAD_FOLDER = '/avatar/',
-	TITLE = '货品管理',
 	fn;
 
 /*-----------------------------------*\
@@ -52,44 +51,6 @@ router.post('/', function(req, res) {
 		if(err) {
 			req.flash('error', err);
 			return res.redirect('/');
-		}
-		
-		req.flash('success', '提交成功');
-		req.session.product = {
-			username: newProduct.username,
-			name: newProduct.name,
-			artno: newProduct.artno
-		};
-		return res.redirect('/uploadImg');
-	});
-});
-
-/*-----------------------------------*\
-|--------编辑货品信息product----------|
-\*-----------------------------------*/
-router.get('/product', function(req, res) {
-	res.render('product', {
-		title: '货品管理',
-		user: req.session.user,
-		success: req.flash('success').toString(),
-		error: req.flash('error').toString()
-	});
-});
-
-router.post('/product', function(req, res) {
-	var newProduct = new Product({
-		username: req.session.user.username,
-		name: req.body.name,
-		artno: req.body.artno,
-		place: req.body.place,
-		price: req.body.price,
-		stock: req.body.stock
-	});
-	
-	newProduct.save(function(err, doc) {
-		if(err) {
-			req.flash('error', err);
-			return res.redirect('/product');
 		}
 		
 		req.flash('success', '提交成功');
@@ -205,6 +166,44 @@ router.post('/reg', function(req, res, next) {
 });
 
 /*-----------------------------------*\
+|--------编辑货品信息product----------|
+\*-----------------------------------*/
+router.get('/product', function(req, res) {
+	res.render('product', {
+		title: '货品管理',
+		user: req.session.user,
+		success: req.flash('success').toString(),
+		error: req.flash('error').toString()
+	});
+});
+
+router.post('/product', function(req, res) {
+	var newProduct = new Product({
+		username: req.session.user.username,
+		name: req.body.name,
+		artno: req.body.artno,
+		place: req.body.place,
+		price: req.body.price,
+		stock: req.body.stock
+	});
+	
+	newProduct.save(function(err, doc) {
+		if(err) {
+			req.flash('error', err);
+			return res.redirect('/product');
+		}
+		
+		req.flash('success', '提交成功');
+		req.session.product = {
+			username: newProduct.username,
+			name: newProduct.name,
+			artno: newProduct.artno
+		};
+		return res.redirect('/uploadImg');
+	});
+});
+
+/*-----------------------------------*\
 |------------图片uploadImg------------|
 \*-----------------------------------*/
 router.get('/uploadImg', function(req, res, next) {
@@ -215,15 +214,15 @@ router.get('/uploadImg', function(req, res, next) {
 		if(err) {
 			req.flash('error', err);
 			return res.redirect('/uploadImg');
-		} else {
-			res.render('uploadImg', {
-				title: '上传图片',
-				user: req.session.user,
-				proImgs: product.imgs,
-				success: req.flash('success').toString(),
-				error: req.flash('error').toString()
-			});
 		}
+		console.log(product.imgs);
+		res.render('uploadImg', {
+			title: '上传图片',
+			user: req.session.user,
+			proImgs: product.imgs,
+			success: req.flash('success').toString(),
+			error: req.flash('error').toString()
+		});
 	})
 	
 });
@@ -245,7 +244,6 @@ router.post('/uploadImg', function(req, res, next) {
         if (err) {
             console.log(err);
 			req.flash('error', err);
-            res.render('index', { title: TITLE });
             return res.redirect('/uploadImg');
         }
         
@@ -287,11 +285,11 @@ router.post('/uploadImg', function(req, res, next) {
 				return res.redirect('/uploadImg');
 			}
 		})
+
+		console.log('上传成功');
+		req.flash('success', '上传成功');
+		res.redirect('/uploadImg');
     });
-	
-    console.log('上传成功');
-	req.flash('success', '上传成功');
-	res.redirect('/uploadImg');
 })
 
 /*-----------------------------------*\
