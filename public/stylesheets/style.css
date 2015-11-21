@@ -20,3 +20,7 @@ body {
 	top: 10px;
 	left: calc((100% - 290px) / 2);
 }
+
+.alert-box .alert {
+	margin: 0;
+}

@@ -37,32 +37,6 @@ router.get('/', function(req, res, next) {
 	})
 });
 
-router.post('/', function(req, res) {
-	var newProduct = new Product({
-		username: req.session.user.username,
-		name: req.body.name,
-		artno: req.body.artno,
-		place: req.body.place,
-		price: req.body.price,
-		stock: req.body.stock
-	});
-	
-	newProduct.save(function(err, doc) {
-		if(err) {
-			req.flash('error', err);
-			return res.redirect('/');
-		}
-		
-		req.flash('success', '提交成功');
-		req.session.product = {
-			username: newProduct.username,
-			name: newProduct.name,
-			artno: newProduct.artno
-		};
-		return res.redirect('/uploadImg');
-	});
-});
-
 /*-----------------------------------*\
 |-------------登录login---------------|
 \*-----------------------------------*/
@@ -178,12 +152,19 @@ router.get('/product', function(req, res) {
 });
 
 router.post('/product', function(req, res) {
+	var arr_range = [];
+	var arr_price = [];
+	
+	arr_range.push(req.body.range1, req.body.range2);
+	arr_price.push(req.body.price1, req.body.price2, req.body.price3);
+	
 	var newProduct = new Product({
 		username: req.session.user.username,
 		name: req.body.name,
 		artno: req.body.artno,
 		place: req.body.place,
-		price: req.body.price,
+		range: arr_range,
+		price: arr_price,
 		stock: req.body.stock
 	});
 	
@@ -215,7 +196,7 @@ router.get('/uploadImg', function(req, res, next) {
 			req.flash('error', err);
 			return res.redirect('/uploadImg');
 		}
-		console.log(product.imgs);
+
 		res.render('uploadImg', {
 			title: '上传图片',
 			user: req.session.user,
@@ -266,7 +247,7 @@ router.post('/uploadImg', function(req, res, next) {
         if(extName.length == 0){
             console.log('只支持png和jpg格式图片');
 			req.flash('error', '只支持png和jpg格式图片');
-            return res.redirect('/uploadImg');				   
+            return res.redirect('/uploadImg');		   
         }
 
         var avatarName = Math.random() + '.' + extName;

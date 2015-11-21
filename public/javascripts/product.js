@@ -8,7 +8,6 @@ $(function() {
 	
 	$('input[name="range2"]').change(function() {
 		range2 = parseInt($(this).val());
-		console.log(typeof(range1), range2);
 		if(range2 > range1+1) {
 			$('.range3').html(range2+1);
 			$('.alert-box').html('');

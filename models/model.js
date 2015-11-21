@@ -16,8 +16,8 @@ var productSchema = new Schema({
 	name: String,
 	artno: String,
 	place: String,
-	range: Array,
-	price: Array,
+	range: [Number],
+	price: [Number],
 	stock: Number,
 	imgs: Array,
 	createTime: {
