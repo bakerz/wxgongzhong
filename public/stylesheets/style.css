@@ -13,31 +13,6 @@ body {
 	margin-top: 30px;
 }
 
-.pro-img-item {
-	margin-bottom: 5px;
-//	max-height: 77px;
-//	overflow: hidden;
-}
-.pro-img-item img {
-	width: 100%;
-	height: auto;
-	border: 1px solid #ccc;
-}
-.pro-color-box,
-.pro-size-box {
-	font-size: 0;
-}
-.pro-color-item,
-.pro-size-item {
-	display: inline-block;
-	padding: 6px 12px;
-	border: 1px solid #ccc;
-	border-radius: 4px;
-	vertical-align: top;
-	margin: 0 5px 5px 0;
-	font-size: 16px;
-}
-
 .alert-box {
 	position: relative;
 	z-index: 9999;

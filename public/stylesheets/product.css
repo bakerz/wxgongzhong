@@ -1,0 +1,19 @@
+.num-pri-item {
+	margin-bottom: 10px;
+}
+.num-text {
+	height: 34px;
+	line-height: 34px;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	padding-right: 0;
+}
+.num-link {
+	width: 0;
+	height: 34px;
+	line-height: 34px;
+	float: left;
+	margin: 0;
+	padding: 0;
+}
