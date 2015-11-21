@@ -14,9 +14,10 @@ var userSchema = new Schema({
 var productSchema = new Schema({
 	username: String,
 	name: String,
-	place: String,
-	price: String,
 	artno: String,
+	place: String,
+	range: Array,
+	price: Array,
 	stock: Number,
 	imgs: Array,
 	createTime: {
