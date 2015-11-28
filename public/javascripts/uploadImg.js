@@ -8,6 +8,7 @@ $(function(){
 		
 		if(imgVal.length == 0){
 			$('.alert-box').html('<div class="alert alert-danger" role="alert">请选择要上传的文件</div>');
+			setTimeout(function() {$('.alert-box').html('')}, 2000);
 			$_btn.attr('disabled', 'disabled');
 			$_modalImg.html('');
 			return false;
@@ -17,6 +18,7 @@ $(function(){
 		
 		if(extName != '.png' && extName != '.jpg') {
 			$('.alert-box').html('<div class="alert alert-danger" role="alert">只支持png和jpg格式图片</div>');
+			setTimeout(function() {$('.alert-box').html('')}, 2000);
 			$_btn.attr('disabled', 'disabled');
 			$_modalImg.html('');
 			return false;
