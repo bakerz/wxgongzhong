@@ -39,9 +39,9 @@
 }
 
 #pro-img .modal-img {
-	width: 150px;
     height: 150px;
-    margin: 5px auto 0 auto;
+    text-align: center;
+	margin-top: 10px;
 }
 
 #pro-img .modal-img img {
