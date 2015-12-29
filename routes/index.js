@@ -2,6 +2,9 @@ var express = require('express');
 var crypto = require('crypto');
 var router = express.Router();
 
+var getAppInfo = require('./../app-info');
+var app_info = getAppInfo();
+
 var model = require('../models/model');
 var checkIsLogin = require('./checkLogin');
 
@@ -13,6 +16,8 @@ var formidable = require('formidable'),
 	AVATAR_UPLOAD_FOLDER = '/avatar/',
 	fn;
 
+console.log('app_id: ' + app_info[0].app_id);
+	
 /*-----------------------------------*\
 |--------------货品列表---------------|
 \*-----------------------------------*/
