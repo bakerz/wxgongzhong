@@ -73,19 +73,6 @@ var getAccessToken = function() {
 	*/
 }
 
-/*
-
-var get_access_token = function() {
-	token = ;
-	if(!token) {
-		get(
-			url: 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxfa32d83416ac0866&secret=APPSECRET'
-		)
-	}
-	return token;
-	//
-}
-*/
 //module.exports = getAccessToken;
 exports.getAccessToken = getAccessToken;
 //module.exports = get_access_token;
