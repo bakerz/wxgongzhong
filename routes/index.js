@@ -2,8 +2,7 @@ var express = require('express');
 var crypto = require('crypto');
 var router = express.Router();
 
-var getAppInfo = require('./../app-info');
-var app_info = getAppInfo();
+var sign = require('./sign');
 
 var model = require('../models/model');
 var checkIsLogin = require('./checkLogin');
@@ -14,9 +13,10 @@ var Product = model.Product;
 var formidable = require('formidable'),
 	fs = require('fs'),
 	AVATAR_UPLOAD_FOLDER = '/avatar/',
-	fn;
+	end;
 
-console.log('app_id: ' + app_info[0].app_id);
+//console.log('app_id: ' + app_info[0].app_id);
+console.log('app_id: ' + sign.getAccessToken());
 	
 /*-----------------------------------*\
 |--------------货品列表---------------|
