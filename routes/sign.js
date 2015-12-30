@@ -73,6 +73,4 @@ var getAccessToken = function() {
 	*/
 }
 
-//module.exports = getAccessToken;
 exports.getAccessToken = getAccessToken;
-//module.exports = get_access_token;
