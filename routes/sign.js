@@ -69,12 +69,11 @@ var getTicket = function(accessData, url) {
 				return false
 			}
 			var appInfo = app_info();
-			var ts = createTimeStamp();
 			var signature = sign(resp.ticket, url);
 			
 			cachedSignatures = {
 				nonceStr: createNonceStr(),
-				timestamp: ts,
+				timestamp: createTimestamp(),
 				appid: appInfo[0].app_id,
 				signature: signature,
 				url: url
@@ -100,7 +99,7 @@ var getAccessToken = function(url) {
 	var appInfo = app_info();
 	
 	if(cachedSignatures && cachedSignatures.nonceStr &&cachedSignatures.timestamp) {
-		var t = createTimeStamp() - cachedSignatures.timestamp;
+		var t = createTimestamp() - cachedSignatures.timestamp;
 		console.log('========signature==========' + cachedSignatures.signature);
 		
 		if(t < expireTime) {
