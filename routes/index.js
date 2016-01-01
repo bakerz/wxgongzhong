@@ -14,9 +14,6 @@ var formidable = require('formidable'),
 	fs = require('fs'),
 	AVATAR_UPLOAD_FOLDER = '/avatar/',
 	end;
-
-//console.log('app_id: ' + app_info[0].app_id);
-console.log('app_id: ' + sign.getAccessToken());
 	
 /*-----------------------------------*\
 |--------------货品列表---------------|
@@ -148,6 +145,7 @@ router.post('/reg', function(req, res, next) {
 |--------编辑货品信息product----------|
 \*-----------------------------------*/
 router.get('/product', function(req, res) {
+	sign.getAccessToken(req.url);
 	res.render('product', {
 		title: '货品管理',
 		user: req.session.user,
@@ -193,6 +191,7 @@ router.post('/product', function(req, res) {
 |------------图片uploadImg------------|
 \*-----------------------------------*/
 router.get('/uploadImg', function(req, res, next) {
+
 	Product.findOne({
 		name: req.session.product.name,
 		artno: req.session.product.artno
