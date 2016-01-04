@@ -27,6 +27,7 @@ $(function() {
 		var price2 = $('input[name="price2"]').val().trim();
 		var price3 = $('input[name="price3"]').val().trim();
 		var stock = $('input[name="stock"]').val().trim();
+		/*
 		if(!name.length>0 || !artno.length>0 || !place.length>0 || !range1.length>0 || !range2.length>0 || !price1.length>0 || !price2.length>0 || !price3.length>0 || !stock.length>0) {
 			$('.alert-box').html('<div class="alert alert-danger" role="alert">请完整填写每项数据</div>');
 			setTimeout(function() {$('.alert-box').html('')}, 2000);
@@ -38,5 +39,6 @@ $(function() {
 			setTimeout(function() {$('.alert-box').html('')}, 2000);
 			return false;
 		}
+		*/
 	})
 });

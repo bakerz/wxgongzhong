@@ -145,7 +145,6 @@ router.post('/reg', function(req, res, next) {
 |--------编辑货品信息product----------|
 \*-----------------------------------*/
 router.get('/product', function(req, res) {
-	sign.getAccessToken(req.url);
 	res.render('product', {
 		title: '货品管理',
 		user: req.session.user,
@@ -191,7 +190,7 @@ router.post('/product', function(req, res) {
 |------------图片uploadImg------------|
 \*-----------------------------------*/
 router.get('/uploadImg', function(req, res, next) {
-
+	var config = sign.getAccessToken(req.url);
 	Product.findOne({
 		name: req.session.product.name,
 		artno: req.session.product.artno
@@ -206,7 +205,8 @@ router.get('/uploadImg', function(req, res, next) {
 			user: req.session.user,
 			proImgs: product.imgs,
 			success: req.flash('success').toString(),
-			error: req.flash('error').toString()
+			error: req.flash('error').toString(),
+			config: config
 		});
 	})
 	

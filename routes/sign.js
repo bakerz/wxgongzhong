@@ -3,30 +3,57 @@ var https = require('https');
 
 var cachedSignatures = {};
 
+/*
+// 输出数字签名对象
+var responseWithJson = function(res, data) {
+	// 允许跨域异步获取
+	res.set({
+		'Access-Control-Allow-Orign': '*',
+		'Access-Control-Allow-Methods': 'POST,GET',
+		'Access-control-Allow-Credentials': 'true'
+	});
+	res.json(data);
+};
+
+// 输出错误信息
+var errorRender = function(res, inof, data) {
+	if(data) {
+		console.log(data);
+		console.log('-------------');
+	}
+	res.set({
+		'Access-Control-Allow-Orign': '*',
+		'Access-Control-Allow-Methods': 'POST GET',
+		'Access-Control-Allow-Credentials': 'true'
+	});
+	responseWithJson(res, {errmsg: 'error', message: info, data: data});
+};
+*/
+
 // 生成签名的随机串
 var createNonceStr = function () {
-  return Math.random().toString(36).substr(2, 15);
+	return Math.random().toString(36).substr(2, 15);
 };
 
 // 生成签名的时间戳
 var createTimestamp = function () {
-  return parseInt(new Date().getTime() / 1000) + '';
+	return parseInt(new Date().getTime() / 1000) + '';
 };
 
 var raw = function (args) {
-  var keys = Object.keys(args);
-  keys = keys.sort()
-  var newArgs = {};
-  keys.forEach(function (key) {
-    newArgs[key.toLowerCase()] = args[key];
-  });
+	var keys = Object.keys(args);
+	keys = keys.sort()
+	var newArgs = {};
+	keys.forEach(function (key) {
+		newArgs[key.toLowerCase()] = args[key];
+	});
 
-  var string = '';
-  for (var k in newArgs) {
-    string += '&' + k + '=' + newArgs[k];
-  }
-  string = string.substr(1);
-  return string;
+	var string = '';
+	for (var k in newArgs) {
+		string += '&' + k + '=' + newArgs[k];
+	}
+	string = string.substr(1);
+	return string;
 };
 
 /**
@@ -42,12 +69,13 @@ var sign = function (jsapi_ticket, url) {
 		jsapi_ticket: jsapi_ticket,
 		nonceStr: createNonceStr(),
 		timestamp: createTimestamp(),
-		url: url
+		url: 'http://www.qzfny.com:3001' + url
 	};
 	var string = raw(ret),
 		jsSHA = require('jssha'),
 		shaObj = new jsSHA(string, 'TEXT');
-		
+	
+	console.log(string);
 	ret.signature = shaObj.getHash('SHA-1', 'HEX');
 	
 	console.log('签名= ' + ret.signature);
@@ -65,29 +93,20 @@ var getTicket = function(accessData, url) {
 			try{
 				resp = JSON.parse(str);
 			}catch(e){
-				// return errorRender(res, '解析远程JSON数据错误', str);
-				return false
+				return console.log('error: ' + str);
 			}
 			var appInfo = app_info();
-			var signature = sign(resp.ticket, url);
+			var ret = sign(resp.ticket, url);
 			
 			cachedSignatures = {
-				nonceStr: createNonceStr(),
-				timestamp: createTimestamp(),
-				appid: appInfo[0].app_id,
-				signature: signature,
-				url: url
+				nonceStr: ret.nonceStr,
+				timestamp: ret.timestamp,
+				appId: appInfo[0].app_id,
+				signature: ret.signature,
+				url: ret.url
 			};
 			
-			/*
-			responseWithJson(res, {
-				nonceStr: nonceStr
-				,timestamp: ts
-				,appid: appid
-				,signature: signature
-				,url: url
-			});
-			*/
+			return cachedSignatures;
 		});
 	});
 };
@@ -100,10 +119,17 @@ var getAccessToken = function(url) {
 	
 	if(cachedSignatures && cachedSignatures.nonceStr &&cachedSignatures.timestamp) {
 		var t = createTimestamp() - cachedSignatures.timestamp;
-		console.log('========signature==========' + cachedSignatures.signature);
+		console.log('======= signature ========');
 		
 		if(t < expireTime) {
-			return true;
+			console.log('====== result form cache ======');
+			console.log('appId     = ' + cachedSignatures.appId);
+			console.log('timestamp = ' + cachedSignatures.timestamp);
+			console.log('nonceStr  = ' + cachedSignatures.nonceStr);
+			console.log('signature = ' + cachedSignatures.signature);
+			console.log('url       = ' + cachedSignatures.url);
+			
+			return cachedSignatures;
 		}
 	}
 	https.get('https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' + appInfo[0].app_id + '&secret=' + appInfo[0].app_secret, function(_res) {
@@ -115,39 +141,14 @@ var getAccessToken = function(url) {
 			try {
 				resp = JSON.parse(str);
 			} catch(e) {
-				// return errorRender(res, '解析远程JSON数据错误', str);
-				return 'false';
+				return console.log('error: ' + str);
 			}
 			
-			// getTicket
 			getTicket(resp, url);
 		});
 	})
 };
 
-/*;
-// 输出数字签名对象
-var reponseWithJson = function(res, data) {
-	// 允许跨域异步获取
-	res.set({
-		'Access-Control-Allow-Orign': '*',
-		'Access-Control-Allow-Methods': 'POST,GET',
-		'Access-control-Allow-Credentials': 'true'
-	});
-	res.json(data);
-};
-*/
 
-
-/*
-wx.config({
-    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-    appId: '', // 必填，公众号的唯一标识
-    timestamp: , // 必填，生成签名的时间戳
-    nonceStr: '', // 必填，生成签名的随机串
-    signature: '',// 必填，签名，见附录1
-    jsApiList: [] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
-});
-*/
 
 exports.getAccessToken = getAccessToken;

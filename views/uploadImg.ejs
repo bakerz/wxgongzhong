@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="/stylesheets/uploadImg.css" />
 	<script src="/bower_components/jquery/dist/jquery.min.js"></script>
 	<script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-	<script src="/javascripts/uploadImg.js"></script>
+	
 	<script src="/javascripts/script.js"></script>
 </head>
 <body>
@@ -19,13 +19,16 @@
 		<div class="row">
 			<div class="col-xs-12">
 				<div class="form-group img-group">
+					<div id="prive-test">
 					<% proImgs.forEach(function(img){ %>
 					<div class="col-xs-4 pro-img-item">
 						<img src="/avatar/<%= img %>">
 					</div>
 					<% }); %>
+					</div>
 					<div class="col-xs-12">
-						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-img">添加</button>
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="pro-img" id="choose">微信选择图片</button>
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="pro-img" id="upload">微信上传图片</button>
 					</div>
 				</div>
 				<div class="form-group">
@@ -61,4 +64,96 @@
 		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 </body>
+<script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+<script>
+<% if(config) { %>
+wx.config({
+	debug: true,
+	appId: '<%= config.appId %>',
+	timestamp: <%= config.timestamp %>,
+	nonceStr: '<%= config.nonceStr %>',
+	signature: '<%= config.signature %>',
+	jsApiList: [
+		'chooseImage',
+		'previewImage',
+		'uploadImage',
+		'downloadImage'
+	]
+});
+<% } %>
+wx.ready(function() {
+	// 1 判断当前版本是否支持指定 JS 接口，支持批量判断
+	wx.checkJsApi({
+		jsApiList: [
+			'chooseImage',
+			'previewImage',
+			'uploadImage',
+			'downloadImage'
+		],
+		success: function (res) {
+			alert(JSON.stringify(res));
+		}
+	});
+	
+	var images = {
+		localId: [],
+		serverId: []
+	};
+	// 选择图片
+	document.querySelector('#choose').onclick = function() {
+		wx.chooseImage({
+			success: function (res) {
+				images.localId = res.localIds;
+				alert('已选择' + res.localIds.length + '张图片');
+				
+				// 预览图片
+				var len = images.localId.length - 1;
+				while(!(len == -1)) {
+					var img = new Image();
+					img.src = images.localId[len];
+					var d = document.createElement('div');
+					d.className = 'col-xs-4 pro-img-item';
+					d.appendChild(img);
+					document.getElementById('prive-test').appendChild(d);
+					len--;
+				}
+			}
+		});
+	};
+	
+	
+	// 上传图片
+	document.querySelector('#upload').onclick = function () {
+		if (images.localId.length == 0) {
+			alert('请先使用 chooseImage 接口选择图片');
+			return;
+		}
+		var i = 0, length = images.localId.length;
+		images.serverId = [];
+		function upload() {
+			wx.uploadImage({
+				localId: images.localId[i],
+				success: function (res) {
+					i++;
+					//alert('已上传：' + i + '/' + length);
+					images.serverId.push(res.serverId);
+					if (i < length) {
+						upload();
+					}
+				},
+				fail: function (res) {
+					alert(JSON.stringify(res));
+				}
+			});
+		}
+		upload();
+	};
+});
+
+wx.error(function(res) {
+	JSON.stringify(res);
+});
+
+</script>
+<script src="/javascripts/uploadImg.js"></script>
 </html>
