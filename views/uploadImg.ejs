@@ -27,7 +27,7 @@
 					<% }); %>
 					</div>
 					<div class="col-xs-12">
-						<button type="button" class="btn btn-info" data-toggle="modal" data-target="pro-img" id="choose">微信选择图片</button>
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-img" id="choose">微信选择图片</button>
 						<button type="button" class="btn btn-info" data-toggle="modal" data-target="pro-img" id="upload">微信上传图片</button>
 					</div>
 				</div>
@@ -53,11 +53,11 @@
 					</div>
 					<div class="modal-body">
 						<input type="file" class="form-control" name="img" id="img" accept="image/*" />
-						<div class="modal-img"></div>
+						<div class="modal-img" id="modal-upload"></div>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-						<button type="submit" class="btn btn-primary" id="submit-btn" disabled="disabled">上传此图片</button>
+						<button type="submit" class="btn btn-primary" id="submit-btn">上传此图片</button>
 					</div>
 				</form>
 			</div><!-- /.modal-content -->
@@ -91,7 +91,7 @@ wx.ready(function() {
 			'downloadImage'
 		],
 		success: function (res) {
-			alert(JSON.stringify(res));
+			//alert(JSON.stringify(res));
 		}
 	});
 	
@@ -102,6 +102,7 @@ wx.ready(function() {
 	// 选择图片
 	document.querySelector('#choose').onclick = function() {
 		wx.chooseImage({
+			count:1,
 			success: function (res) {
 				images.localId = res.localIds;
 				alert('已选择' + res.localIds.length + '张图片');
@@ -114,7 +115,10 @@ wx.ready(function() {
 					var d = document.createElement('div');
 					d.className = 'col-xs-4 pro-img-item';
 					d.appendChild(img);
-					document.getElementById('prive-test').appendChild(d);
+					//document.getElementById('prive-test').appendChild(d);
+					alert(document.getElementById('img').value);
+					document.getElementById('img').value = img.src;
+					document.getElementById('modal-upload').appendChild(d);
 					len--;
 				}
 			}
@@ -134,9 +138,18 @@ wx.ready(function() {
 			wx.uploadImage({
 				localId: images.localId[i],
 				success: function (res) {
+					wx.downloadImage({
+						serverId: res.serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
+						isShowProgressTips: 1, // 默认为1，显示进度提示
+						success: function (res) {
+							var localId = res.localId; // 返回图片下载后的本地ID
+							alert('localId = ' + localId);
+						}
+					});
 					i++;
 					//alert('已上传：' + i + '/' + length);
 					images.serverId.push(res.serverId);
+					
 					if (i < length) {
 						upload();
 					}
