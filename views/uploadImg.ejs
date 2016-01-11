@@ -27,7 +27,7 @@
 					<% }); %>
 					</div>
 					<div class="col-xs-12">
-						<button type="button" class="btn btn-info" data-toggle="modal" data-target="#pro-img" id="choose">微信选择图片</button>
+						<button type="button" class="btn btn-info" data-toggle="modal" data-target="pro-img" id="choose">微信选择图片</button>
 						<button type="button" class="btn btn-info" data-toggle="modal" data-target="pro-img" id="upload">微信上传图片</button>
 					</div>
 				</div>
@@ -67,6 +67,7 @@
 <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
 <script>
 <% if(config) { %>
+var access_token = '<%= config.access_token %>'
 wx.config({
 	debug: true,
 	appId: '<%= config.appId %>',
@@ -99,6 +100,7 @@ wx.ready(function() {
 		localId: [],
 		serverId: []
 	};
+	var img = new Image();
 	// 选择图片
 	document.querySelector('#choose').onclick = function() {
 		wx.chooseImage({
@@ -110,15 +112,14 @@ wx.ready(function() {
 				// 预览图片
 				var len = images.localId.length - 1;
 				while(!(len == -1)) {
-					var img = new Image();
 					img.src = images.localId[len];
 					var d = document.createElement('div');
 					d.className = 'col-xs-4 pro-img-item';
 					d.appendChild(img);
-					//document.getElementById('prive-test').appendChild(d);
-					alert(document.getElementById('img').value);
-					document.getElementById('img').value = img.src;
-					document.getElementById('modal-upload').appendChild(d);
+					document.getElementById('prive-test').appendChild(d);
+					//alert(document.getElementById('img').value);
+					//document.getElementById('img').value = img.src;
+					//document.getElementById('modal-upload').appendChild(d);
 					len--;
 				}
 			}
@@ -138,14 +139,7 @@ wx.ready(function() {
 			wx.uploadImage({
 				localId: images.localId[i],
 				success: function (res) {
-					wx.downloadImage({
-						serverId: res.serverId, // 需要下载的图片的服务器端ID，由uploadImage接口获得
-						isShowProgressTips: 1, // 默认为1，显示进度提示
-						success: function (res) {
-							var localId = res.localId; // 返回图片下载后的本地ID
-							alert('localId = ' + localId);
-						}
-					});
+					wxImgCallback(res.serverId);
 					i++;
 					//alert('已上传：' + i + '/' + length);
 					images.serverId.push(res.serverId);
@@ -161,12 +155,19 @@ wx.ready(function() {
 		}
 		upload();
 	};
+	
 });
 
 wx.error(function(res) {
 	JSON.stringify(res);
 });
 
+function wxImgCallback(serverId) {
+	var url = '/downloadImg/' + serverId;
+	$.getJSON(url, function(data) {
+		alert(data);
+	});
+}
 </script>
 <script src="/javascripts/uploadImg.js"></script>
 </html>

@@ -3,33 +3,6 @@ var https = require('https');
 
 var cachedSignatures = {};
 
-/*
-// 输出数字签名对象
-var responseWithJson = function(res, data) {
-	// 允许跨域异步获取
-	res.set({
-		'Access-Control-Allow-Orign': '*',
-		'Access-Control-Allow-Methods': 'POST,GET',
-		'Access-control-Allow-Credentials': 'true'
-	});
-	res.json(data);
-};
-
-// 输出错误信息
-var errorRender = function(res, inof, data) {
-	if(data) {
-		console.log(data);
-		console.log('-------------');
-	}
-	res.set({
-		'Access-Control-Allow-Orign': '*',
-		'Access-Control-Allow-Methods': 'POST GET',
-		'Access-Control-Allow-Credentials': 'true'
-	});
-	responseWithJson(res, {errmsg: 'error', message: info, data: data});
-};
-*/
-
 // 生成签名的随机串
 var createNonceStr = function () {
 	return Math.random().toString(36).substr(2, 15);
@@ -103,7 +76,8 @@ var getTicket = function(accessData, url) {
 				timestamp: ret.timestamp,
 				appId: appInfo[0].app_id,
 				signature: ret.signature,
-				url: ret.url
+				url: ret.url,
+				access_token: accessData.access_token
 			};
 			
 			return cachedSignatures;
@@ -128,7 +102,7 @@ var getAccessToken = function(url) {
 			console.log('nonceStr  = ' + cachedSignatures.nonceStr);
 			console.log('signature = ' + cachedSignatures.signature);
 			console.log('url       = ' + cachedSignatures.url);
-			
+			console.log('token     = ' + cachedSignatures.access_token);
 			return cachedSignatures;
 		}
 	}

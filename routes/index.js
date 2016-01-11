@@ -1,6 +1,7 @@
 var express = require('express');
-var crypto = require('crypto');
-var router = express.Router();
+var crypto  = require('crypto');
+var http    = require('http');
+var router  = express.Router();
 
 var sign = require('./sign');
 
@@ -14,7 +15,8 @@ var formidable = require('formidable'),
 	fs = require('fs'),
 	AVATAR_UPLOAD_FOLDER = '/avatar/',
 	end;
-	
+
+var config;
 /*-----------------------------------*\
 |--------------货品列表---------------|
 \*-----------------------------------*/
@@ -190,7 +192,8 @@ router.post('/product', function(req, res) {
 |------------图片uploadImg------------|
 \*-----------------------------------*/
 router.get('/uploadImg', function(req, res, next) {
-	var config = sign.getAccessToken(req.url);
+	config = sign.getAccessToken(req.url);
+	
 	Product.findOne({
 		name: req.session.product.name,
 		artno: req.session.product.artno
@@ -209,10 +212,29 @@ router.get('/uploadImg', function(req, res, next) {
 			config: config
 		});
 	})
-	
+});
+
+// 图片下载到本地服务器
+router.get('/downloadImg/:media_id', function(req, res, next) {
+	var url = 'http://api.weixin.qq.com/cgi-bin/media/get?access_token='+config.access_token+'&media_id='+ req.params.media_id;
+	console.log('url = '+ url);
+	http.get(url, function(_res) {
+		_res.on('data', function(data) {
+			console.log('server=' + data);
+		});
+		_res.on('end', function() {
+			try {
+				return 'success';
+			} catch(e) {
+				return 'error';
+			}
+		});
+	});
 });
 
 router.post('/uploadImg', function(req, res, next) {
+	
+	//var file = req.body.img;
     //创建上传表单
     var form = new formidable.IncomingForm();
     //设置编辑
@@ -233,6 +255,7 @@ router.post('/uploadImg', function(req, res, next) {
         }
         
         var extName = '';  //后缀名
+		console.log('file = ' + files.img);
         switch (files.img.type) {
             case 'image/pjpeg':
                 extName = 'jpg';
@@ -275,6 +298,17 @@ router.post('/uploadImg', function(req, res, next) {
 		req.flash('success', '上传成功');
 		res.redirect('/uploadImg');
     });
+	/*
+	//get filename
+	var filename = req.files.files.originalFilename || path.basename(req.files.files.ws.path);
+	//copy file to a public directory
+	var targetPath = path.dirname(__filename) + '/public/' + filename;
+	//copy file
+	fs.createReadStream(req.files.files.ws.path).pipe(fs.createWriteStream(targetPath));
+	//return file url
+	res.json({code: 200, msg: {url: 'http://' + req.headers.host + '/' + filename}});
+	res.redirect('/uploadImg');
+	*/
 })
 
 /*-----------------------------------*\
