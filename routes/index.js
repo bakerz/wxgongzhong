@@ -229,6 +229,8 @@ router.get('/downloadImg/:media_id', function(req, res, next) {
 				return 'error';
 			}
 		});
+	}).on('error', function(e) {
+		console.log('error = ' + e.message);
 	});
 });
 

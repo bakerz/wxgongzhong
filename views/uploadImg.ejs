@@ -164,9 +164,10 @@ wx.error(function(res) {
 
 function wxImgCallback(serverId) {
 	var url = '/downloadImg/' + serverId;
-	$.getJSON(url, function(data) {
+	$.get(url, function(data) {
 		alert(data);
 	});
+	return 'success';
 }
 </script>
 <script src="/javascripts/uploadImg.js"></script>
